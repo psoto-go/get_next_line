@@ -6,13 +6,13 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/09 19:12:48 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/10 17:07:37 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #ifndef BUFFER_SIZE 
-#define BUFFER_SIZE 3
+#define BUFFER_SIZE 133
 #endif
 
 size_t	ft_strlen(const char *s)
@@ -53,21 +53,36 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (aux);
 }
 
+char	*ft_strrchr(const char *str, int c)
+{
+	int	count;
 
-int		new_line(char *buff)
+	count = ft_strlen(str);
+	while (count >= 0)
+	{
+		if (str[count] == (unsigned char)c)
+			return ((char *)str + (count));
+		count--;
+	}
+	return (0);
+}
+
+
+
+int		next_line(char *buff)
 {
 	int	count;
 	int	i;
 
 	count = 0;
 	i = 0;
-	while (buff[i] != '\0')
+	while (buff[i] != '\0' && count == 0)
 	{
 		if(buff[i] == '\n')
 			count = 1;
 		i++;
 	}
-	return (i);
+	return (count);
 }
 
 
@@ -75,23 +90,21 @@ char	*get_next_line(int fd)
 {
 	char		*buffer;
 	static char	*buffer_static;
-	int			re;
 	int			count;
+	int			prueba;
 
-	buffer = malloc(sizeof(char) * BUFFER_SIZE);
-	buffer_static = malloc(sizeof(char) * BUFFER_SIZE);
-	if (!buffer)
-		return (NULL);
-	count = 0;
-	read(fd, buffer, BUFFER_SIZE);
-	while (buffer[count] != '\n' && count <= BUFFER_SIZE)
+	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	buffer_static = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	count = 1;
+	prueba = 1;
+	// printf("%d", count);
+	while (count > 0 && !next_line(buffer_static))
 	{
-
-		buffer_static[count] = buffer[count];
-		// buffer_static = ft_strjoin(buffer_static, buffer);
-		count++;
+		count = read(fd, buffer, BUFFER_SIZE);
+		buffer[count] = '\0';
+		buffer_static = ft_strjoin(buffer_static,buffer);
+		printf("%d ", prueba++);
 	}
-	// free(buffer);
 	return (buffer_static);
 }
 int main()
