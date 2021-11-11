@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/11 16:12:03 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/11 16:24:36 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		i++;
 	}
 	aux[count] = '\0';
+	free(s1);
 	return (aux);
 }
 
