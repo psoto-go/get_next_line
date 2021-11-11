@@ -6,25 +6,11 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:03:47 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/09 18:22:33 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/11 15:55:00 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-char	*ft_strrchr(const char *str, int c)
-{
-	int	count;
-
-	count = ft_strlen(str);
-	while (count >= 0)
-	{
-		if (str[count] == (unsigned char)c)
-			return ((char *)str + (count));
-		count--;
-	}
-	return (0);
-}
 
 size_t	ft_strlen(const char *s)
 {
@@ -34,6 +20,18 @@ size_t	ft_strlen(const char *s)
 	while (s[count] != '\0')
 		count++;
 	return (count);
+}
+
+char	*ft_strchr(const char *str, int c)
+{
+	unsigned int	count;
+
+	count = 0;
+	while (str[count] && str[count] != (unsigned char)c)
+		count++;
+	if (str[count] == (unsigned char)c)
+		return ((char *)str + count);
+	return (0);
 }
 
 
@@ -64,4 +62,3 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	aux[count] = '\0';
 	return (aux);
 }
-

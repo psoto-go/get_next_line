@@ -6,14 +6,12 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/10 17:07:37 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/11 16:12:03 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#ifndef BUFFER_SIZE 
-#define BUFFER_SIZE 133
-#endif
+
 
 size_t	ft_strlen(const char *s)
 {
@@ -24,6 +22,19 @@ size_t	ft_strlen(const char *s)
 		count++;
 	return (count);
 }
+
+char	*ft_strchr(const char *str, int c)
+{
+	unsigned int	count;
+
+	count = 0;
+	while (str[count] && str[count] != (unsigned char)c)
+		count++;
+	if (str[count] == (unsigned char)c)
+		return ((char *)str + count);
+	return (0);
+}
+
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
@@ -53,23 +64,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (aux);
 }
 
-char	*ft_strrchr(const char *str, int c)
-{
-	int	count;
-
-	count = ft_strlen(str);
-	while (count >= 0)
-	{
-		if (str[count] == (unsigned char)c)
-			return ((char *)str + (count));
-		count--;
-	}
-	return (0);
-}
-
-
-
-int		next_line(char *buff)
+int		bool_next_line(char *buff)
 {
 	int	count;
 	int	i;
@@ -85,30 +80,59 @@ int		next_line(char *buff)
 	return (count);
 }
 
+char	*only_line(char *buffer_static)
+{
+	char	*line;
+	int		len;
+	int		len2;
+	int		count;
+
+	len = ft_strlen(buffer_static);
+	len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
+	line = malloc(sizeof(char) * len - len2);
+	count = 0;
+	while ((len - len2) >= count)
+	{
+		line[count] = buffer_static[count];
+		count++;
+	}
+	free(buffer_static);
+	return(line);
+}
 
 char	*get_next_line(int fd)
 {
 	char		*buffer;
 	static char	*buffer_static;
+	char		*line;
 	int			count;
 	int			prueba;
+	int			i;
 
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	buffer_static = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	count = 1;
 	prueba = 1;
+	i = 0;
 	// printf("%d", count);
-	while (count > 0 && !next_line(buffer_static))
+	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
 		count = read(fd, buffer, BUFFER_SIZE);
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static,buffer);
-		printf("%d ", prueba++);
+		// printf("%d ", prueba++);
 	}
-	return (buffer_static);
+	free(buffer);
+	line = only_line(buffer_static);
+	// buffer_static = NULL;
+	buffer_static = ft_strchr(buffer_static, '\n') + 1;
+	
+	return (line);
 }
 int main()
 {
-	printf("%s", get_next_line(open("./hola.txt", O_RDONLY , O_RDONLY)));
-	// system("leaks a.out");
+	int file = open("./hola.txt", O_RDONLY , O_RDONLY);
+	printf("%s", get_next_line(file));
+	close(file);
+	system("leaks a.out");
 }
