@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/11 18:58:12 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/11 19:22:05 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,10 +169,10 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	static char	*buffer_static;
 	char		*line;
+	char		*aux;
 	int			count;
 	int			prueba;
 	int			i;
-	int			a;
 
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer_static)
@@ -180,7 +180,6 @@ char	*get_next_line(int fd)
 	count = 1;
 	prueba = 1;
 	i = 0;
-	a = 0;
 	// printf("%d", count);
 	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
@@ -191,15 +190,13 @@ char	*get_next_line(int fd)
 	}
 	free(buffer);
 	line = only_line(buffer_static);
-	// buffer_static = NULL;
-	// char *aux;
-	// aux = buffer_static;
-	// while(buffer_static[a] != '\n')
-	// 	a++;
-	// buffer_static = ft_substr(buffer_static, a + 1, ft_strlen(buffer_static));
-	buffer_static = ft_strchr(buffer_static, '\n') + 1;
-	// free(aux);
-	return (buffer_static);
+	aux = buffer_static;
+	while(buffer_static[i] != '\n')
+		i++;
+	buffer_static = ft_substr(buffer_static, i + 1, ft_strlen(buffer_static));
+	// buffer_static = ft_strchr(buffer_static, '\n') + 1;
+	free(aux);
+	return (line);
 }
 int main()
 {
