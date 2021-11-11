@@ -6,12 +6,11 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/11 16:44:33 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/11 18:58:12 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
 
 size_t	ft_strlen(const char *s)
 {
@@ -22,6 +21,26 @@ size_t	ft_strlen(const char *s)
 		count++;
 	return (count);
 }
+
+void	*ft_memcpy(void *str1, const void *str2, size_t n)
+{
+	unsigned char	*temp1;
+	unsigned char	*temp2;
+	size_t			count;
+
+	temp1 = (unsigned char *)str1;
+	temp2 = (unsigned char *)str2;
+	count = 0;
+	if (str1 == NULL && str2 == NULL)
+		return (NULL);
+	while (count < n)
+	{	
+		temp1[count] = temp2[count];
+		count++;
+	}
+	return (str1);
+}
+
 
 char	*ft_strchr(const char *str, int c)
 {
@@ -65,6 +84,50 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (aux);
 }
 
+char	*ft_strdup(const char *src)
+{
+	char			*aux;
+	size_t			len;
+
+	len = ft_strlen(src) + 1;
+	aux = (char *)malloc(len * sizeof(char));
+	if (aux == NULL)
+		return (NULL);
+	ft_memcpy(aux, src, len);
+	return (aux);
+}
+
+
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	unsigned int	i;
+	char			*aux;
+	unsigned int	count;
+
+	if (!s)
+		return (NULL);
+	if (len > ft_strlen(s))
+		aux = (char *)malloc((ft_strlen(s)) * sizeof(char));
+	else
+		aux = (char *)malloc((len + 1) * sizeof(char));
+	count = 0;
+	if (!aux)
+		return (NULL);
+	if (start >= ft_strlen(s))
+		start = ft_strlen(s);
+	i = start;
+	while (count < (unsigned int)len && s[i])
+	{
+		aux[count] = s[i];
+		count++;
+		i++;
+	}
+	aux[count] = '\0';
+	return (aux);
+}
+
+
 int		bool_next_line(char *buff)
 {
 	int	count;
@@ -97,7 +160,7 @@ char	*only_line(char *buffer_static)
 		line[count] = buffer_static[count];
 		count++;
 	}
-	free(buffer_static);
+	// free(buffer_static);
 	return(line);
 }
 
@@ -109,12 +172,15 @@ char	*get_next_line(int fd)
 	int			count;
 	int			prueba;
 	int			i;
+	int			a;
 
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	buffer_static = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!buffer_static)
+		buffer_static = ft_strdup("");
 	count = 1;
 	prueba = 1;
 	i = 0;
+	a = 0;
 	// printf("%d", count);
 	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
@@ -126,9 +192,14 @@ char	*get_next_line(int fd)
 	free(buffer);
 	line = only_line(buffer_static);
 	// buffer_static = NULL;
+	// char *aux;
+	// aux = buffer_static;
+	// while(buffer_static[a] != '\n')
+	// 	a++;
+	// buffer_static = ft_substr(buffer_static, a + 1, ft_strlen(buffer_static));
 	buffer_static = ft_strchr(buffer_static, '\n') + 1;
-	
-	return (line);
+	// free(aux);
+	return (buffer_static);
 }
 int main()
 {
