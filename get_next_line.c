@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/12 13:20:20 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/12 19:37:59 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,6 @@ char	*ft_strdup(const char *src)
 	return (aux);
 }
 
-
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	unsigned int	i;
@@ -126,7 +124,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	aux[count] = '\0';
 	return (aux);
 }
-
 
 int		bool_next_line(char *buff)
 {
@@ -164,42 +161,72 @@ char	*only_line(char *buffer_static)
 	return(line);
 }
 
+char	*next_line(char *buffer_static)
+{
+	int 	count;
+	// char	*aux;
+
+	count = 0;
+	while(buffer_static[count] != '\n')
+		count++;
+	buffer_static = ft_substr(buffer_static, count + 1, ft_strlen(buffer_static));
+	// printf("%s@@@@@@@@@\n",aux);
+	// aux = buffer_static;
+	// free(buffer_static);
+	return(buffer_static);
+}
+
 char	*get_next_line(int fd)
 {
 	char		*buffer;
 	static char	*buffer_static;
 	char		*line;
-	// char		*aux;
 	int			count;
 	int			prueba;
-	int			i;
 
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!buffer)
+		return(NULL);
 	if (!buffer_static)
 		buffer_static = ft_strdup("");
 	count = 1;
 	prueba = 1;
-	i = 0;
 	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
 		count = read(fd, buffer, BUFFER_SIZE);
 		buffer[count] = '\0';
-		buffer_static = ft_strjoin(buffer_static,buffer);
+		buffer_static = ft_strjoin(buffer_static, buffer);
 	}
 	free(buffer);
+	// printf("%s", "hola");
 	line = only_line(buffer_static);
-	// aux = buffer_static;
-	// while(buffer_static[i] != '\n')
-	// 	i++;
-	// buffer_static = ft_substr(buffer_static, i + 1, ft_strlen(buffer_static));
-	buffer_static = ft_strchr(buffer_static, '\n') + 1;
-	// free(aux);
+	// buffer_static = ft_strchr(buffer_static, '\n') + 1;
+	buffer_static = next_line(buffer_static);
 	return (line);
 }
+void	leaks()
+{
+	system("leaks a.out");
+}
+
 int main()
 {
 	int file = open("./hola.txt", O_RDONLY , O_RDONLY);
-	printf("%s", get_next_line(file));
-	close(file);
+	char *line = get_next_line(file);
+
+	while (line)
+	{
+		printf("%s", line);
+		// free(line);
+		line = get_next_line(file);
+	}
+	// free(line);
+	// printf("%s", line);
+	// free(line);
+	// line = get_next_line(file);
+	// close(file);
+	// free(line);
 	// system("leaks a.out");
+	// system("");
+	// atexit(leaks);
 }
