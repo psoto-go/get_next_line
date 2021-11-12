@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/11 19:22:05 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/12 13:20:20 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,14 +153,14 @@ char	*only_line(char *buffer_static)
 
 	len = ft_strlen(buffer_static);
 	len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
-	line = malloc(sizeof(char) * len - len2);
+	line = malloc(sizeof(char) * len - len2 + 1);
 	count = 0;
-	while ((len - len2) >= count)
+	while ((len - len2) > count)
 	{
 		line[count] = buffer_static[count];
 		count++;
 	}
-	// free(buffer_static);
+	line[count] = '\0';
 	return(line);
 }
 
@@ -169,7 +169,7 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	static char	*buffer_static;
 	char		*line;
-	char		*aux;
+	// char		*aux;
 	int			count;
 	int			prueba;
 	int			i;
@@ -180,22 +180,20 @@ char	*get_next_line(int fd)
 	count = 1;
 	prueba = 1;
 	i = 0;
-	// printf("%d", count);
 	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
 		count = read(fd, buffer, BUFFER_SIZE);
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static,buffer);
-		// printf("%d ", prueba++);
 	}
 	free(buffer);
 	line = only_line(buffer_static);
-	aux = buffer_static;
-	while(buffer_static[i] != '\n')
-		i++;
-	buffer_static = ft_substr(buffer_static, i + 1, ft_strlen(buffer_static));
-	// buffer_static = ft_strchr(buffer_static, '\n') + 1;
-	free(aux);
+	// aux = buffer_static;
+	// while(buffer_static[i] != '\n')
+	// 	i++;
+	// buffer_static = ft_substr(buffer_static, i + 1, ft_strlen(buffer_static));
+	buffer_static = ft_strchr(buffer_static, '\n') + 1;
+	// free(aux);
 	return (line);
 }
 int main()
@@ -203,5 +201,5 @@ int main()
 	int file = open("./hola.txt", O_RDONLY , O_RDONLY);
 	printf("%s", get_next_line(file));
 	close(file);
-	system("leaks a.out");
+	// system("leaks a.out");
 }
