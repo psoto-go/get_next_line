@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/14 21:57:25 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/14 22:18:52 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,16 +164,12 @@ char	*only_line(char *buffer_static)
 char	*next_line(char *buffer_static)
 {
 	int 	count;
-	// char	*aux;
 
 	count = 0;
 	while(buffer_static[count] != '\n')
 		count++;
 	buffer_static = ft_substr(buffer_static, count + 1, ft_strlen(buffer_static));
-	// printf("%s@@@@@@@@@\n",aux);
-	// aux = buffer_static;
-	// free(buffer_static);
-	return(buffer_static);
+	return (buffer_static);
 }
 
 char	*get_next_line(int fd)
@@ -221,7 +217,7 @@ int main()
 	while (line)
 	{
 		printf("%s", line);
-		// free(line);
+		free(line);
 		line = get_next_line(file);
 		count++;
 	}
