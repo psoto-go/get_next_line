@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/12 19:37:59 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/14 21:57:25 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,8 @@ char	*get_next_line(int fd)
 	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
 		count = read(fd, buffer, BUFFER_SIZE);
+		if (count <= 0)
+			return(0);
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static, buffer);
 	}
@@ -213,14 +215,17 @@ int main()
 {
 	int file = open("./hola.txt", O_RDONLY , O_RDONLY);
 	char *line = get_next_line(file);
+	int count;
 
+	count = 0;
 	while (line)
 	{
 		printf("%s", line);
 		// free(line);
 		line = get_next_line(file);
+		count++;
 	}
-	// free(line);
+	free(line);
 	// printf("%s", line);
 	// free(line);
 	// line = get_next_line(file);
