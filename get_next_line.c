@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/15 15:55:09 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/15 18:41:32 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ char	*only_line(char *buffer_static)
 	len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
 	line = malloc(sizeof(char) * len - len2 + 1);
 	count = 0;
-	while ((len - len2) > count)
+	while (((len - len2) + 1) > count)
 	{
 		line[count] = buffer_static[count];
 		count++;
@@ -192,17 +192,12 @@ char	*get_next_line(int fd)
 	// printf("%d\n", prueba++);
 	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
-		// printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 		count = read(fd, buffer, BUFFER_SIZE);
-		// printf("#########################################\n");
-		if (count <= 0)
-			return (0);
-		// printf("¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢\n");
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static, buffer);
-		
 	}
-	
+	if (count <= 0)
+		return (NULL);
 	free(buffer);
 	if (!buffer_static)
 		return(0);
