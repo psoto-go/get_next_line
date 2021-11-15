@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/15 18:41:32 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/15 20:02:33 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,18 +148,20 @@ char	*only_line(char *buffer_static)
 	char	*line;
 	int		len;
 	int		len2;
-	int		count;
+	int		i;
 
 	len = ft_strlen(buffer_static);
 	len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
 	line = malloc(sizeof(char) * len - len2 + 1);
-	count = 0;
-	while (((len - len2) + 1) > count)
+	i = 0;
+	
+	while (((len - len2) + 1) > i)
 	{
-		line[count] = buffer_static[count];
-		count++;
+		line[i] = buffer_static[i];
+		i++;
 	}
-	line[count] = '\0';
+	line[i] = '\0';
+	// printf("%d", count);
 	return(line);
 }
 
@@ -193,15 +195,23 @@ char	*get_next_line(int fd)
 	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
 		count = read(fd, buffer, BUFFER_SIZE);
+		// if (count <= 0)
+		// 	break ;
+		if (count <= 0)
+			break;
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static, buffer);
+		// printf("%s\n", buffer_static);
 	}
-	if (count <= 0)
-		return (NULL);
+	// printf("%d", count);
+	// printf("%s\n", buffer_static);
 	free(buffer);
+	if (count <= 0)
+		return(NULL);
 	if (!buffer_static)
 		return(0);
 	line = only_line(buffer_static);
+	
 	// buffer_static = ft_strchr(buffer_static, '\n') + 1;
 	buffer_static = next_line(buffer_static);
 	return (line);
