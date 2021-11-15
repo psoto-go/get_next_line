@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/14 22:18:52 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/15 15:55:09 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ int		bool_next_line(char *buff)
 
 	count = 0;
 	i = 0;
+	if (!buff)
+		return (count);
 	while (buff[i] != '\0' && count == 0)
 	{
 		if(buff[i] == '\n')
@@ -187,16 +189,23 @@ char	*get_next_line(int fd)
 		buffer_static = ft_strdup("");
 	count = 1;
 	prueba = 1;
+	// printf("%d\n", prueba++);
 	while (count > 0 && bool_next_line(buffer_static) != 1)
 	{
+		// printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 		count = read(fd, buffer, BUFFER_SIZE);
+		// printf("#########################################\n");
 		if (count <= 0)
-			return(0);
+			return (0);
+		// printf("¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢¢\n");
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static, buffer);
+		
 	}
+	
 	free(buffer);
-	// printf("%s", "hola");
+	if (!buffer_static)
+		return(0);
 	line = only_line(buffer_static);
 	// buffer_static = ft_strchr(buffer_static, '\n') + 1;
 	buffer_static = next_line(buffer_static);
