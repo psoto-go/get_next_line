@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/15 20:02:33 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/16 22:37:18 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,11 @@ char	*only_line(char *buffer_static)
 	int		i;
 
 	len = ft_strlen(buffer_static);
-	len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
+	if (ft_strchr(buffer_static, '\n'))
+		len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
+	else
+		len2 = ft_strlen(ft_strchr(buffer_static, '\0'));
+	// len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
 	line = malloc(sizeof(char) * len - len2 + 1);
 	i = 0;
 	
@@ -161,7 +165,7 @@ char	*only_line(char *buffer_static)
 		i++;
 	}
 	line[i] = '\0';
-	// printf("%d", count);
+	// printf("ho\n");
 	return(line);
 }
 
@@ -182,7 +186,7 @@ char	*get_next_line(int fd)
 	static char	*buffer_static;
 	char		*line;
 	int			count;
-	int			prueba;
+	int			flag;
 
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)
@@ -190,27 +194,25 @@ char	*get_next_line(int fd)
 	if (!buffer_static)
 		buffer_static = ft_strdup("");
 	count = 1;
-	prueba = 1;
-	// printf("%d\n", prueba++);
-	while (count > 0 && bool_next_line(buffer_static) != 1)
+	flag = 0;
+	// printf("%d\n", flag++);
+	while (count > 0 && bool_next_line(buffer_static) != 1 )
 	{
 		count = read(fd, buffer, BUFFER_SIZE);
-		// if (count <= 0)
-		// 	break ;
-		if (count <= 0)
-			break;
+		if (count == -1)
+			return (0);
+		if (count == 0)
+			break ;
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static, buffer);
 		// printf("%s\n", buffer_static);
 	}
 	// printf("%d", count);
-	// printf("%s\n", buffer_static);
 	free(buffer);
-	if (count <= 0)
-		return(NULL);
-	if (!buffer_static)
+	if (!buffer_static || !*buffer_static)
 		return(0);
 	line = only_line(buffer_static);
+	// printf("%s\n\n", line);
 	
 	// buffer_static = ft_strchr(buffer_static, '\n') + 1;
 	buffer_static = next_line(buffer_static);
@@ -239,7 +241,7 @@ int main()
 	// printf("%s", line);
 	// free(line);
 	// line = get_next_line(file);
-	// close(file);
+	close(file);
 	// free(line);
 	// system("leaks a.out");
 	// system("");
