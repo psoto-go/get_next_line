@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/17 19:24:59 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:19:51 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return(NULL);
 	if (!buffer_static)
-		buffer_static = malloc(sizeof(char) * 0);
+		buffer_static = ft_strdup("");
 	count = 1;
 	while (count > 0 && !bool_next_line(buffer_static))
 	{
@@ -111,7 +111,9 @@ char	*get_next_line(int fd)
 		if (count == -1)
 		{
 			free(buffer);
-			return(0);
+			free(buffer_static);
+			buffer_static = NULL;
+			return(NULL);
 		}	
 		if (count == 0)
 			break ;
@@ -122,7 +124,8 @@ char	*get_next_line(int fd)
 	if (!*buffer_static ||!buffer_static)
 	{
 		free(buffer_static);
-		return(0);
+		buffer_static = NULL;
+		return(NULL);
 	}
 	
 	line = only_line(buffer_static);	
@@ -134,26 +137,27 @@ void	leaks()
 {
 	system("leaks a.out");
 }
-int main()
-{
-	int file = open("./hola.txt", O_RDWR);
-	char *line = get_next_line(file);
-	int count;
+// int main()
+// {
+// 	int file = open("./vacio.txt", O_RDWR);
+// 	char *line = get_next_line(file);
+// 	int count;
+// 		line = get_next_line(file);
 
-	count = 0;
-	while (line)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(file);
-		count++;
-	}
-	free(line);
-	// printf("%s", line);
-	// free(line);
-	// line = get_next_line(file);
-	// free(line);
-	// system("leaks a.out");
-	// system("");
-	// atexit(leaks);
-}
+// 	count = 0;
+// 	while (line)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(file);
+// 		count++;
+// 	}
+// 	free(line);
+// 	// printf("%s", line);
+// 	// free(line);
+// 	// line = get_next_line(file);
+// 	// free(line);
+// 	// system("leaks a.out");
+// 	// system("");
+// 	// atexit(leaks);
+// }
