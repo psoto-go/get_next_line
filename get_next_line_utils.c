@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/07 23:03:47 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/11 15:55:00 by psoto-go         ###   ########.fr       */
+/*   Created: 2021/11/17 12:25:59 by psoto-go          #+#    #+#             */
+/*   Updated: 2021/11/17 16:16:06 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,25 @@ size_t	ft_strlen(const char *s)
 	while (s[count] != '\0')
 		count++;
 	return (count);
+}
+
+void	*ft_memcpy(void *str1, const void *str2, size_t n)
+{
+	unsigned char	*temp1;
+	unsigned char	*temp2;
+	size_t			count;
+
+	temp1 = (unsigned char *)str1;
+	temp2 = (unsigned char *)str2;
+	count = 0;
+	if (str1 == NULL && str2 == NULL)
+		return (NULL);
+	while (count < n)
+	{	
+		temp1[count] = temp2[count];
+		count++;
+	}
+	return (str1);
 }
 
 char	*ft_strchr(const char *str, int c)
@@ -60,5 +79,48 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		i++;
 	}
 	aux[count] = '\0';
+	free((char *)s1);
+	return (aux);
+}
+
+char	*ft_strdup(const char *src)
+{
+	char			*aux;
+	size_t			len;
+
+	len = ft_strlen(src) + 1;
+	aux = (char *)malloc(len * sizeof(char));
+	if (aux == NULL)
+		return (NULL);
+	ft_memcpy(aux, src, len);
+	return (aux);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	unsigned int	i;
+	char			*aux;
+	unsigned int	count;
+
+	if (!s)
+		return (NULL);
+	if (len > ft_strlen(s))
+		aux = (char *)malloc((ft_strlen(s)) * sizeof(char));
+	else
+		aux = (char *)malloc((len + 1) * sizeof(char));
+	count = 0;
+	if (!aux)
+		return (NULL);
+	if (start >= ft_strlen(s))
+		start = ft_strlen(s);
+	i = start;
+	while (count < (unsigned int)len && s[i])
+	{
+		aux[count] = s[i];
+		count++;
+		i++;
+	}
+	aux[count] = '\0';
+	free((char *)s);
 	return (aux);
 }

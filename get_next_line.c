@@ -6,124 +6,11 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/16 22:37:18 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/17 16:34:30 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	count;
-
-	count = 0;
-	while (s[count] != '\0')
-		count++;
-	return (count);
-}
-
-void	*ft_memcpy(void *str1, const void *str2, size_t n)
-{
-	unsigned char	*temp1;
-	unsigned char	*temp2;
-	size_t			count;
-
-	temp1 = (unsigned char *)str1;
-	temp2 = (unsigned char *)str2;
-	count = 0;
-	if (str1 == NULL && str2 == NULL)
-		return (NULL);
-	while (count < n)
-	{	
-		temp1[count] = temp2[count];
-		count++;
-	}
-	return (str1);
-}
-
-
-char	*ft_strchr(const char *str, int c)
-{
-	unsigned int	count;
-
-	count = 0;
-	while (str[count] && str[count] != (unsigned char)c)
-		count++;
-	if (str[count] == (unsigned char)c)
-		return ((char *)str + count);
-	return (0);
-}
-
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char		*aux;
-	size_t		count;
-	size_t		i;
-
-	if (!s1 || !s2)
-		return (NULL);
-	aux = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	count = 0;
-	i = 0;
-	if (!aux)
-		return (NULL);
-	while (count < ft_strlen(s1))
-	{
-		aux[count] = s1[count];
-		count++;
-	}
-	while (i < ft_strlen(s2))
-	{
-		aux[count] = s2[i];
-		count++;
-		i++;
-	}
-	aux[count] = '\0';
-	free((char *)s1);
-	return (aux);
-}
-
-char	*ft_strdup(const char *src)
-{
-	char			*aux;
-	size_t			len;
-
-	len = ft_strlen(src) + 1;
-	aux = (char *)malloc(len * sizeof(char));
-	if (aux == NULL)
-		return (NULL);
-	ft_memcpy(aux, src, len);
-	return (aux);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	unsigned int	i;
-	char			*aux;
-	unsigned int	count;
-
-	if (!s)
-		return (NULL);
-	if (len > ft_strlen(s))
-		aux = (char *)malloc((ft_strlen(s)) * sizeof(char));
-	else
-		aux = (char *)malloc((len + 1) * sizeof(char));
-	count = 0;
-	if (!aux)
-		return (NULL);
-	if (start >= ft_strlen(s))
-		start = ft_strlen(s);
-	i = start;
-	while (count < (unsigned int)len && s[i])
-	{
-		aux[count] = s[i];
-		count++;
-		i++;
-	}
-	aux[count] = '\0';
-	return (aux);
-}
 
 int		bool_next_line(char *buff)
 {
@@ -147,37 +34,61 @@ char	*only_line(char *buffer_static)
 {
 	char	*line;
 	int		len;
-	int		len2;
+	// int		len2;
 	int		i;
 
-	len = ft_strlen(buffer_static);
-	if (ft_strchr(buffer_static, '\n'))
-		len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
-	else
-		len2 = ft_strlen(ft_strchr(buffer_static, '\0'));
-	// len2 = ft_strlen(ft_strchr(buffer_static, '\n'));
-	line = malloc(sizeof(char) * len - len2 + 1);
+	len = 0;
 	i = 0;
-	
-	while (((len - len2) + 1) > i)
+	while (buffer_static[len] && buffer_static[len] != '\n')
 	{
-		line[i] = buffer_static[i];
-		i++;
+		len++;
 	}
-	line[i] = '\0';
-	// printf("ho\n");
+	if (buffer_static[len] == '\n')
+		len++;
+	line = malloc(sizeof(char) * (len + 1));
+	if (!line)
+		return(0);
+	len = 0;
+	while (buffer_static[len] && buffer_static[len] != '\n')
+	{
+		line[len] = buffer_static[len];
+		len++;
+	}
+	if (buffer_static[len] == '\n')
+		line[len++] = '\n';
+	line[len] = '\0';
 	return(line);
 }
 
 char	*next_line(char *buffer_static)
 {
 	int 	count;
+	int		len;
+	char	*buffer2;
+	int		i;
 
 	count = 0;
-	while(buffer_static[count] != '\n')
+	len = ft_strlen(buffer_static);
+	i = 0;
+	// printf("\n\n\n%sFUNCIONNNNNN\n\n\n",buffer_static);
+	while(buffer_static[count] && buffer_static[count] != '\n')
 		count++;
-	buffer_static = ft_substr(buffer_static, count + 1, ft_strlen(buffer_static));
-	return (buffer_static);
+	if (buffer_static[count] == '\n')
+		count++;
+	buffer2 = malloc(sizeof(char) * (len + 1));
+	if (!buffer2)
+		return(0);
+	while(buffer_static[count])
+	{
+		buffer2[i] = buffer_static[count];
+		i++;
+		count++;
+	}
+	buffer2[i] = '\0';
+	free(buffer_static);
+	// buffer_static = ft_substr(buffer_static, count + 1, ft_strlen(buffer_static));
+	// printf("\n\n\n%cFUNCIONNNNNN\n\n\n",count);
+	return (buffer2);
 }
 
 char	*get_next_line(int fd)
@@ -186,7 +97,6 @@ char	*get_next_line(int fd)
 	static char	*buffer_static;
 	char		*line;
 	int			count;
-	int			flag;
 
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)
@@ -194,56 +104,46 @@ char	*get_next_line(int fd)
 	if (!buffer_static)
 		buffer_static = ft_strdup("");
 	count = 1;
-	flag = 0;
-	// printf("%d\n", flag++);
 	while (count > 0 && bool_next_line(buffer_static) != 1 )
 	{
 		count = read(fd, buffer, BUFFER_SIZE);
-		if (count == -1)
-			return (0);
-		if (count == 0)
+		if (count <= 0)
 			break ;
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static, buffer);
-		// printf("%s\n", buffer_static);
 	}
-	// printf("%d", count);
 	free(buffer);
 	if (!buffer_static || !*buffer_static)
 		return(0);
-	line = only_line(buffer_static);
-	// printf("%s\n\n", line);
-	
-	// buffer_static = ft_strchr(buffer_static, '\n') + 1;
+	line = only_line(buffer_static);	
 	buffer_static = next_line(buffer_static);
 	return (line);
 }
-void	leaks()
-{
-	system("leaks a.out");
-}
 
-int main()
-{
-	int file = open("./hola.txt", O_RDONLY , O_RDONLY);
-	char *line = get_next_line(file);
-	int count;
+// void	leaks()
+// {
+// 	system("leaks a.out");
+// }
+// int main()
+// {
+// 	int file = open("./hola.txt", O_RDWR);
+// 	char *line = get_next_line(file);
+// 	int count;
 
-	count = 0;
-	while (line)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(file);
-		count++;
-	}
-	free(line);
-	// printf("%s", line);
-	// free(line);
-	// line = get_next_line(file);
-	close(file);
-	// free(line);
-	// system("leaks a.out");
-	// system("");
-	// atexit(leaks);
-}
+// 	count = 0;
+// 	while (line)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(file);
+// 		count++;
+// 	}
+// 	free(line);
+// 	// printf("%s", line);
+// 	// free(line);
+// 	// line = get_next_line(file);
+// 	// free(line);
+// 	// system("leaks a.out");
+// 	// system("");
+// 	// atexit(leaks);
+// }

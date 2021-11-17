@@ -6,7 +6,7 @@
 #    By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/02 15:01:07 by psoto-go          #+#    #+#              #
-#    Updated: 2021/11/11 15:55:37 by psoto-go         ###   ########.fr        #
+#    Updated: 2021/11/17 12:34:57 by psoto-go         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CC				= gcc
 RM				= rm -f
 CFLAGS			= -Wall -Wextra -Werror
 
-NAME			= libftprintf.a
+NAME			= get_next_line.a
 
 all:			$(NAME)
 
