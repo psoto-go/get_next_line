@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/17 22:53:52 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/17 22:54:06 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int		bool_next_line(char *buff)
 {
@@ -123,32 +123,3 @@ char	*get_next_line(int fd)
 	buffer_static = next_line(buffer_static);
 	return (line);
 }
-
-// void	leaks()
-// {
-// 	system("leaks a.out");
-// }
-// int main()
-// {
-// 	int file = open("./hola.txt", O_RDWR);
-// 	char *line = get_next_line(file);
-// 	int count;
-// 		// line = get_next_line(file);
-
-// 	count = 0;
-// 	while (line)
-// 	{
-// 		printf("%s", line);
-// 		free(line);
-// 		line = get_next_line(file);
-// 		count++;
-// 	}
-// 	free(line);
-// 	// printf("%s", line);
-// 	// free(line);
-// 	// line = get_next_line(file);
-// 	// free(line);
-// 	// system("leaks a.out");
-// 	// system("");
-// 	// atexit(leaks);
-// }
