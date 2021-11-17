@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/17 17:14:34 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/17 19:24:59 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*only_line(char *buffer_static)
 
 char	*next_line(char *buffer_static)
 {
-	int 	count;
+	size_t 	count;
 	int		len;
 	char	*buffer2;
 	int		i;
@@ -73,6 +73,11 @@ char	*next_line(char *buffer_static)
 		count++;
 	if (buffer_static[count] == '\n')
 		count++;
+	if (count == ft_strlen(buffer_static))
+	{
+		free(buffer_static);
+		return (0);
+	}
 	buffer2 = malloc(sizeof(char) * (len + 1));
 	if (!buffer2)
 		return(NULL);
@@ -98,19 +103,28 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return(NULL);
 	if (!buffer_static)
-		buffer_static = ft_strdup("");
+		buffer_static = malloc(sizeof(char) * 0);
 	count = 1;
-	while (count > 0 && bool_next_line(buffer_static) != 1 )
+	while (count > 0 && !bool_next_line(buffer_static))
 	{
 		count = read(fd, buffer, BUFFER_SIZE);
-		if (count <= 0)
+		if (count == -1)
+		{
+			free(buffer);
+			return(0);
+		}	
+		if (count == 0)
 			break ;
 		buffer[count] = '\0';
 		buffer_static = ft_strjoin(buffer_static, buffer);
 	}
 	free(buffer);
-	if (!*buffer_static)
-		return(NULL);
+	if (!*buffer_static ||!buffer_static)
+	{
+		free(buffer_static);
+		return(0);
+	}
+	
 	line = only_line(buffer_static);	
 	buffer_static = next_line(buffer_static);
 	return (line);
@@ -122,7 +136,7 @@ void	leaks()
 }
 int main()
 {
-	int file = open("./gnlTester/files/big_line_with_nl", O_RDWR);
+	int file = open("./hola.txt", O_RDWR);
 	char *line = get_next_line(file);
 	int count;
 
@@ -141,5 +155,5 @@ int main()
 	// free(line);
 	// system("leaks a.out");
 	// system("");
-	atexit(leaks);
+	// atexit(leaks);
 }
