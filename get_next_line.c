@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:02:45 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/17 16:34:30 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/17 17:14:34 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	*only_line(char *buffer_static)
 {
 	char	*line;
 	int		len;
-	// int		len2;
 	int		i;
 
 	len = 0;
@@ -47,7 +46,7 @@ char	*only_line(char *buffer_static)
 		len++;
 	line = malloc(sizeof(char) * (len + 1));
 	if (!line)
-		return(0);
+		return(NULL);
 	len = 0;
 	while (buffer_static[len] && buffer_static[len] != '\n')
 	{
@@ -70,14 +69,13 @@ char	*next_line(char *buffer_static)
 	count = 0;
 	len = ft_strlen(buffer_static);
 	i = 0;
-	// printf("\n\n\n%sFUNCIONNNNNN\n\n\n",buffer_static);
 	while(buffer_static[count] && buffer_static[count] != '\n')
 		count++;
 	if (buffer_static[count] == '\n')
 		count++;
 	buffer2 = malloc(sizeof(char) * (len + 1));
 	if (!buffer2)
-		return(0);
+		return(NULL);
 	while(buffer_static[count])
 	{
 		buffer2[i] = buffer_static[count];
@@ -86,8 +84,6 @@ char	*next_line(char *buffer_static)
 	}
 	buffer2[i] = '\0';
 	free(buffer_static);
-	// buffer_static = ft_substr(buffer_static, count + 1, ft_strlen(buffer_static));
-	// printf("\n\n\n%cFUNCIONNNNNN\n\n\n",count);
 	return (buffer2);
 }
 
@@ -113,37 +109,37 @@ char	*get_next_line(int fd)
 		buffer_static = ft_strjoin(buffer_static, buffer);
 	}
 	free(buffer);
-	if (!buffer_static || !*buffer_static)
-		return(0);
+	if (!*buffer_static)
+		return(NULL);
 	line = only_line(buffer_static);	
 	buffer_static = next_line(buffer_static);
 	return (line);
 }
 
-// void	leaks()
-// {
-// 	system("leaks a.out");
-// }
-// int main()
-// {
-// 	int file = open("./hola.txt", O_RDWR);
-// 	char *line = get_next_line(file);
-// 	int count;
+void	leaks()
+{
+	system("leaks a.out");
+}
+int main()
+{
+	int file = open("./gnlTester/files/big_line_with_nl", O_RDWR);
+	char *line = get_next_line(file);
+	int count;
 
-// 	count = 0;
-// 	while (line)
-// 	{
-// 		printf("%s", line);
-// 		free(line);
-// 		line = get_next_line(file);
-// 		count++;
-// 	}
-// 	free(line);
-// 	// printf("%s", line);
-// 	// free(line);
-// 	// line = get_next_line(file);
-// 	// free(line);
-// 	// system("leaks a.out");
-// 	// system("");
-// 	// atexit(leaks);
-// }
+	count = 0;
+	while (line)
+	{
+		printf("%s", line);
+		free(line);
+		line = get_next_line(file);
+		count++;
+	}
+	free(line);
+	// printf("%s", line);
+	// free(line);
+	// line = get_next_line(file);
+	// free(line);
+	// system("leaks a.out");
+	// system("");
+	atexit(leaks);
+}

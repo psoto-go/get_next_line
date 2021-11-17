@@ -6,7 +6,7 @@
 /*   By: psoto-go <psoto-go@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 23:03:09 by psoto-go          #+#    #+#             */
-/*   Updated: 2021/11/17 13:12:39 by psoto-go         ###   ########.fr       */
+/*   Updated: 2021/11/17 16:40:22 by psoto-go         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <limits.h>
 # include <fcntl.h>
 #ifndef BUFFER_SIZE 
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 132
 #endif
 
 char	*get_next_line(int fd);
