@@ -1,7 +1,0 @@
-Llamar a tu función get_next_line en un bucle te permitirá leer el contenido de un file descriptor línea a línea hasta el final.
-Tu función deberá devolver la línea que se acaba de leer. Si no hay nada más que leer o si ha ocurrido un error, deberá devolver NULL.
-Asegúrate de que tu función se comporta adecuadamente cuando lea de un archivo y cuando lea de stdin.
-libft no se permite para este proyecto. Debes añadir un archivo get_next_line_utils.c que tendrá las funciones necesarias para que tu get_next_line funcione.
-Tu programa debe compilar con la flag -D BUFFER_SIZE=xx. Esta flag se utilizará para determinar el tamaño del buffer de las lecturas de tu get_next_line. Este parámetro será modificado por tus evaluadores y por Moulinette.
-La compilación se realizará de la siguiente forma: gcc -Wall -Werror -Wextra -D BUFFER_SIZE=32 get_next_line.c get_next_line_utils.c.
-El programa se compilará de la siguiente forma: gcc -Wall -Werror -Wextra -D BUFFER_SIZE=42 <archivos>.cFINALÑLLLLL
